@@ -20,13 +20,22 @@ module OmniAuth
         :website => 'http://axschema.org/contact/web/default',
         :image => 'http://axschema.org/media/image/aspect11'
       }
-
+      
       option :name, :open_id
       option :required, [AX[:email], AX[:name], AX[:first_name], AX[:last_name], 'email', 'fullname']
       option :optional, [AX[:nickname], AX[:city], AX[:state], AX[:website], AX[:image], 'postcode', 'nickname']
       option :store, ::OpenID::Store::Memory.new
       option :identifier, nil
       option :identifier_param, 'openid_url'
+      
+      def initialize(app, store = nil, options = {}, &block)
+        super(app, options, &block)
+        @options.name = options[:name] || :open_id
+        @options.required = [AX[:email], AX[:name], AX[:first_name], AX[:last_name], 'email', 'fullname']
+        @options.optional = [AX[:nickname], AX[:city], AX[:state], AX[:website], AX[:image], 'postcode', 'nickname']
+        @options.identifier = options[:identifier]
+        @options.store = store
+      end
 
       def dummy_app
         lambda{|env| [401, {"WWW-Authenticate" => Rack::OpenID.build_header(

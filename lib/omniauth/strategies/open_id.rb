@@ -98,6 +98,10 @@ module OmniAuth
         end
         @openid_response
       end
+      
+      def user_info(response)
+              sreg_user_info(response).merge(ax_user_info(response))
+      end
 
       def sreg_user_info
         sreg = ::OpenID::SReg::Response.from_success_response(openid_response)

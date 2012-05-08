@@ -99,8 +99,8 @@ module OmniAuth
         @openid_response
       end
       
-      def user_info(response)
-        sreg_user_info(response).merge(ax_user_info(response))
+      def user_info
+        sreg_user_info.merge(ax_user_info)
       end
 
       def sreg_user_info
